@@ -5,9 +5,11 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { MedicalHistoryModule } from './medical-history/medical-history.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { DoctorsModule } from './doctors/doctors.module';
-import { AppointmentsModule } from './appointments/appointments.module';
+import { ConsultationsModule } from './appointments/consultation.module';
 import { PatientsModule } from './patients/patients.module';
-import { PatientsDoctorModule } from './patients-doctor/patients-doctor.module';
+import { DiseasesModule } from './diseases/diseases.module';
+import { PracticesModule } from './practices/practices.module';
+import { EntriesModule } from './entries/entries.module';
 import databaseConfig from './config/database.config';
 
 @Module({
@@ -34,9 +36,11 @@ import databaseConfig from './config/database.config';
     }),
     PatientsModule,
     DoctorsModule,
-    AppointmentsModule,
+    ConsultationsModule,
     MedicalHistoryModule,
-    PatientsDoctorModule,
+    DiseasesModule,
+    PracticesModule,
+    EntriesModule,
   ],
   controllers: [AppController],
   providers: [AppService],

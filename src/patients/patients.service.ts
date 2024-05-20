@@ -5,6 +5,7 @@ import { DeleteResult, Repository, UpdateResult } from 'typeorm';
 import { Patient } from './entities/patient.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ErrorManager } from 'src/utils/error.manager';
+import { MedicalHistory } from 'src/medical-history/entities/medical-history.entity';
 
 @Injectable()
 export class PatientsService {
@@ -12,18 +13,27 @@ export class PatientsService {
   constructor(
     @InjectRepository(Patient)
     private readonly patientRepository: Repository<Patient>,
+    @InjectRepository(MedicalHistory)
+    private readonly medicalHistoryRepository: Repository<MedicalHistory>,
   ) {}
 
   public async createPatient(body: CreatePatientDto): Promise<Patient> {
     try {
-      const patient: Patient = await this.patientRepository.save(body);
-      if (!patient) {
+      // Crear instancia del paciente y su historia clínica
+      const patient: Patient = this.patientRepository.create({
+        ...body,
+        medicalHistory: {}, // Crear una historia clínica vacía
+      });
+
+      // Guardar el paciente, lo que también guardará la historia clínica gracias a `cascade`
+      const savedPatient = await this.patientRepository.save(patient);
+      if (!savedPatient) {
         throw new ErrorManager({
           type: 'BAD_REQUEST',
           message: 'No se encontro resultado',
         });
       }
-      return patient;
+      return savedPatient;
     } catch (error) {
       throw ErrorManager.createsignatureError(error.message);
     }

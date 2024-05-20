@@ -1,21 +1,24 @@
 import { IsDate, IsNotEmpty, IsNumber, IsString } from 'class-validator';
 
-export class CreateDoctorDto {
-  id: number;
-  @IsNotEmpty()
-  @IsNumber()
-  registrationNumber: number;
-  @IsNotEmpty()
-  @IsString()
-  name: string;
-  @IsNotEmpty()
-  @IsString()
-  surname: string;
-  @IsNotEmpty()
-  @IsString()
-  specialty: string;
+export class CreatePracticeDto {
   @IsNotEmpty()
   @IsDate()
-  AdmissionDate: Date;
+  date: Date;
+  @IsNotEmpty()
+  @IsString()
+  patient: string;
+  @IsNotEmpty()
+  @IsString()
+  doctor: string;
+  @IsNotEmpty()
+  @IsNumber()
+  duration: number;
+  @IsNotEmpty()
+  @IsString()
+  complications: string;
+  @IsNotEmpty()
+  @IsString()
+  result: string;
+
   createdAt: Date;
 }

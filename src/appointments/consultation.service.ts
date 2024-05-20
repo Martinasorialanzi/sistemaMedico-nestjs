@@ -1,103 +1,101 @@
 import { Injectable } from '@nestjs/common';
-import { CreateAppointmentDto } from './dto/create-appointment.dto';
-import { UpdateAppointmentDto } from './dto/update-appointment.dto';
+import { CreateConsultationDto } from './dto/create-consultation.dto';
+import { UpdateConsultationDto } from './dto/update-consultation.dto';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Appointment } from './entities/appointment.entity';
+import { Consultation } from './entities/consultation.entity';
 import { DeleteResult, Repository, UpdateResult } from 'typeorm';
 import { ErrorManager } from 'src/utils/error.manager';
 
 @Injectable()
-export class AppointmentsService {
+export class ConsultationsService {
   constructor(
-    @InjectRepository(Appointment)
-    private readonly appointmentRepository: Repository<Appointment>,
+    @InjectRepository(Consultation)
+    private readonly consultationRepository: Repository<Consultation>,
   ) {}
-  public async createAppointment(
-    body: CreateAppointmentDto,
-  ): Promise<Appointment> {
+  public async createConsultation(
+    body: CreateConsultationDto,
+  ): Promise<Consultation> {
     try {
-      const appointment: Appointment =
-        await this.appointmentRepository.save(body);
-      if (!appointment) {
+      const consultation: Consultation =
+        await this.consultationRepository.save(body);
+      if (!consultation) {
         throw new ErrorManager({
           type: 'BAD_REQUEST',
           message: 'No se encontro resultado',
         });
       }
-      return appointment;
+      return consultation;
     } catch (error) {
       throw ErrorManager.createsignatureError(error.message);
     }
   }
 
-  public async findAllAppointments(): Promise<Appointment[]> {
+  public async findAllConsultations(): Promise<Consultation[]> {
     try {
-      const appointments: Appointment[] =
-        await this.appointmentRepository.find();
+      const consultation: Consultation[] =
+        await this.consultationRepository.find();
       //aca guardo el error como tal
-      if (appointments.length === 0) {
+      if (consultation.length === 0) {
         throw new ErrorManager({
           type: 'BAD_REQUEST',
           message: 'No se encontro resultado',
         });
       }
-      return appointments;
+      return consultation;
     } catch (error) {
       //aca lo ejecuto
       throw ErrorManager.createsignatureError(error.message);
     }
   }
 
-  public async findOneAppointment(id: number): Promise<Appointment> {
+  public async findOneConsultation(id: number): Promise<Consultation> {
     try {
-      const appointment: Appointment = await this.appointmentRepository
+      const consultation: Consultation = await this.consultationRepository
         .createQueryBuilder('user')
         .where({ id })
         .getOne();
-      if (!appointment) {
+      if (!consultation) {
         throw new ErrorManager({
           type: 'BAD_REQUEST',
           message: 'No se encontro resultado',
         });
       }
-      return appointment;
+      return consultation;
     } catch (error) {
       throw ErrorManager.createsignatureError(error.message);
     }
   }
 
-  public async updateAppointment(
+  public async updateConsultation(
     id: number,
-    body: UpdateAppointmentDto,
+    body: UpdateConsultationDto,
   ): Promise<UpdateResult> {
     try {
-      const appointment: UpdateResult = await this.appointmentRepository.update(
-        id,
-        body,
-      );
-      if (appointment.affected === 0) {
+      const consultation: UpdateResult =
+        await this.consultationRepository.update(id, body);
+      if (consultation.affected === 0) {
         throw new ErrorManager({
           type: 'BAD_REQUEST',
           message: 'No se pudo actualizar',
         });
       }
-      return appointment;
+      return consultation;
     } catch (error) {
       throw ErrorManager.createsignatureError(error.message);
     }
   }
 
-  public async removeAppointment(id: number): Promise<DeleteResult> {
+  public async removeConsultation(id: number): Promise<DeleteResult> {
     try {
-      const appointment: DeleteResult =
-        await this.appointmentRepository.delete(id);
-      if (appointment.affected === 0) {
+      const consultation: DeleteResult =
+        await this.consultationRepository.delete(id);
+      if (consultation.affected === 0) {
         throw new ErrorManager({
           type: 'BAD_REQUEST',
           message: 'No se pudo borrar',
         });
       }
-      return appointment;
+      return consultation;
     } catch (error) {
       throw ErrorManager.createsignatureError(error.message);
     }
