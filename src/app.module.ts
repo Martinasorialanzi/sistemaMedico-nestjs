@@ -10,6 +10,9 @@ import { PatientsModule } from './patients/patients.module';
 import { DiseasesModule } from './diseases/diseases.module';
 import { PracticesModule } from './practices/practices.module';
 import { EntriesModule } from './entries/entries.module';
+import { AuthModule } from './auth/auth.module';
+import { UsersModule } from './users/users.module';
+import { AuthModule } from './auth/auth.module';
 import databaseConfig from './config/database.config';
 
 @Module({
@@ -41,6 +44,8 @@ import databaseConfig from './config/database.config';
     DiseasesModule,
     PracticesModule,
     EntriesModule,
+    AuthModule,
+    UsersModule,
   ],
   controllers: [AppController],
   providers: [AppService],
