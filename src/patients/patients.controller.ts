@@ -6,10 +6,12 @@ import {
   Patch,
   Param,
   Delete,
+  UseGuards,
 } from '@nestjs/common';
 import { PatientsService } from './patients.service';
 import { CreatePatientDto } from './dto/create-patient.dto';
 import { UpdatePatientDto } from './dto/update-patient.dto';
+import { AuthGuard } from 'src/auth/auth.guard';
 
 @Controller('patients')
 export class PatientsController {
@@ -20,6 +22,7 @@ export class PatientsController {
     return this.patientsService.createPatient(body);
   }
 
+  @UseGuards(AuthGuard)
   @Get('all')
   findAllPatients() {
     return this.patientsService.findAllPatients();
