@@ -12,6 +12,8 @@ import { PatientsService } from './patients.service';
 import { CreatePatientDto } from './dto/create-patient.dto';
 import { UpdatePatientDto } from './dto/update-patient.dto';
 import { AuthGuard } from 'src/auth/auth.guard';
+import { Roles } from 'src/roles/roles.decorator';
+import { Role } from 'src/roles/role.enum';
 
 @Controller('patients')
 export class PatientsController {
@@ -23,6 +25,7 @@ export class PatientsController {
   }
 
   @UseGuards(AuthGuard)
+  @Roles(Role.Admin)
   @Get('all')
   findAllPatients() {
     return this.patientsService.findAllPatients();

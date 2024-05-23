@@ -1,10 +1,7 @@
 import { BaseEntity } from 'src/config/base.entity';
+import { Role } from 'src/roles/role.enum';
 import { Column, Entity } from 'typeorm';
 
-export enum Role {
-  User = 'user',
-  Admin = 'admin',
-}
 @Entity()
 export class User extends BaseEntity {
   @Column('text')
@@ -13,6 +10,6 @@ export class User extends BaseEntity {
   @Column({ length: 500 })
   password: string;
 
-  @Column()
-  role: Role;
+  @Column('simple-array')
+  role: Role[];
 }

@@ -13,6 +13,9 @@ import { EntriesModule } from './entries/entries.module';
 import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
 import databaseConfig from './config/database.config';
+// import { APP_GUARD } from '@nestjs/core';
+// import { RolesGuard } from './roles/roles.guard';
+// import { AuthGuard } from './auth/auth.guard';
 
 @Module({
   imports: [
@@ -47,6 +50,16 @@ import databaseConfig from './config/database.config';
     UsersModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [
+    AppService,
+    // {
+    //   provide: APP_GUARD,
+    //   useClass: AuthGuard,
+    // },
+    // {
+    //   provide: APP_GUARD,
+    //   useClass: RolesGuard,
+    // },
+  ],
 })
 export class AppModule {}
