@@ -10,6 +10,6 @@ export class User extends BaseEntity {
   @Column({ length: 500 })
   password: string;
 
-  @Column('simple-array')
-  role: Role[];
+  @Column({ type: 'enum', enum: Role })
+  role: Role;
 }

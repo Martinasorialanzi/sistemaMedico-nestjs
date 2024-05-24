@@ -1,7 +1,7 @@
 import {
-  ArrayNotEmpty,
-  ArrayUnique,
-  IsArray,
+  // ArrayNotEmpty,
+  // ArrayUnique,
+  // IsArray,
   IsEnum,
   IsNotEmpty,
   IsString,
@@ -17,9 +17,7 @@ export class CreateUserDto {
   @IsString()
   password: string;
 
-  @IsArray()
-  @ArrayNotEmpty()
-  @ArrayUnique()
+  @IsNotEmpty()
   @IsEnum(Role, { each: true })
-  role: Role[];
+  role: Role;
 }

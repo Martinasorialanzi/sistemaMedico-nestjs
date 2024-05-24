@@ -4,23 +4,10 @@ import { PatientsController } from './patients.controller';
 import { Patient } from './entities/patient.entity';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { MedicalHistory } from 'src/medical-history/entities/medical-history.entity';
-// import { APP_GUARD } from '@nestjs/core';
-// import { RolesGuard } from 'src/roles/roles.guard';
-// import { AuthGuard } from 'src/auth/auth.guard';
 
 @Module({
   imports: [TypeOrmModule.forFeature([Patient, MedicalHistory])],
   controllers: [PatientsController],
-  providers: [
-    PatientsService,
-    // {
-    //   provide: APP_GUARD,
-    //   useClass: AuthGuard,
-    // },
-    // {
-    //   provide: APP_GUARD,
-    //   useClass: RolesGuard,
-    // },
-  ],
+  providers: [PatientsService],
 })
 export class PatientsModule {}
