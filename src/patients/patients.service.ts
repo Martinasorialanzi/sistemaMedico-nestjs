@@ -55,6 +55,23 @@ export class PatientsService {
       throw ErrorManager.createsignatureError(error.message);
     }
   }
+  async findAllWithDeleted(): Promise<Patient[]> {
+    try {
+      const patients: Patient[] = await this.patientRepository
+        .createQueryBuilder('user')
+        .withDeleted()
+        .getMany();
+      if (!patients) {
+        throw new ErrorManager({
+          type: 'BAD_REQUEST',
+          message: 'No se encontro resultado',
+        });
+      }
+      return patients;
+    } catch (error) {
+      throw ErrorManager.createsignatureError(error.message);
+    }
+  }
 
   public async findOnePatient(id: number): Promise<Patient> {
     try {
@@ -97,7 +114,7 @@ export class PatientsService {
 
   public async removePatient(id: number): Promise<DeleteResult> {
     try {
-      const patient: DeleteResult = await this.patientRepository.delete(id);
+      const patient: DeleteResult = await this.patientRepository.softDelete(id);
       if (patient.affected === 0) {
         throw new ErrorManager({
           type: 'BAD_REQUEST',

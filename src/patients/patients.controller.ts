@@ -33,6 +33,12 @@ export class PatientsController {
   findAllPatients() {
     return this.patientsService.findAllPatients();
   }
+  @Roles(Role.Admin, Role.Secretary)
+  @UseGuards(AuthGuard, RolesGuard)
+  @Get('allDeleted')
+  findAllWithDeleted() {
+    return this.patientsService.findAllWithDeleted();
+  }
 
   @Roles(Role.Admin, Role.Secretary)
   @UseGuards(AuthGuard, RolesGuard)

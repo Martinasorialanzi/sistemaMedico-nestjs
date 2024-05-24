@@ -1,6 +1,12 @@
 import { BaseEntity } from 'src/config/base.entity';
 import { MedicalHistory } from 'src/medical-history/entities/medical-history.entity';
-import { Entity, Column, NumericType, OneToOne } from 'typeorm';
+import {
+  Entity,
+  Column,
+  NumericType,
+  OneToOne,
+  DeleteDateColumn,
+} from 'typeorm';
 
 @Entity()
 export class Patient extends BaseEntity {
@@ -23,4 +29,7 @@ export class Patient extends BaseEntity {
     cascade: true,
   })
   medicalHistory: MedicalHistory;
+
+  @DeleteDateColumn()
+  deletedAt?: Date; // Esta columna almacenará la fecha de eliminación
 }

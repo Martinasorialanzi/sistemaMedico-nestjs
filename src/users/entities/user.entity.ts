@@ -10,6 +10,6 @@ export class User extends BaseEntity {
   @Column({ length: 500 })
   password: string;
 
-  @Column({ type: 'enum', enum: Role })
+  @Column({ type: 'enum', enum: Role, default: 'secretary' })
   role: Role;
 }
