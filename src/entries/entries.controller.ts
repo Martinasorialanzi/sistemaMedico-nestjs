@@ -17,9 +17,21 @@ export class EntriesController {
   @Roles(Role.Admin, Role.Secretary)
   @UseGuards(AuthGuard, RolesGuard)
   @Get()
-  findAllEntries(@Query('type') entryType?: string) {
-    return this.entriesService.findAllEntries(entryType);
+  findAllEntries(
+    @Query('type') entryType?: string,
+    @Query('startDate') startDateStr?: string,
+    @Query('endDate') endDateStr?: string,
+  ) {
+    const startDateObj = startDateStr ? new Date(startDateStr) : undefined;
+    const endDateObj = endDateStr ? new Date(endDateStr) : undefined;
+
+    return this.entriesService.findAllEntries(
+      entryType,
+      startDateObj,
+      endDateObj,
+    );
   }
+
   @Roles(Role.Admin, Role.Secretary)
   @UseGuards(AuthGuard, RolesGuard)
   @Get(':id')

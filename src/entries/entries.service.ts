@@ -42,7 +42,11 @@ export class EntriesService {
   //   }
   // }
 
-  public async findAllEntries(entryType?: string): Promise<Entry[]> {
+  public async findAllEntries(
+    entryType?: string,
+    startDate?: Date,
+    endDate?: Date,
+  ): Promise<Entry[]> {
     try {
       const queryBuilder = await this.entityManager
         .createQueryBuilder()
@@ -51,12 +55,17 @@ export class EntriesService {
         .leftJoinAndSelect('entry.medicalHistory', 'medicalHistory')
         .leftJoinAndSelect('medicalHistory.patient', 'patient')
         .select(['entry', 'doctor', 'medicalHistory', 'patient']);
-      // .getMany();
 
       // Add the filter condition based on the entry type
       if (entryType) {
         queryBuilder.where('LOWER(entry.type) ILIKE :type', {
           type: `%${entryType.toLowerCase()}%`,
+        });
+      }
+      if (startDate || endDate) {
+        queryBuilder.andWhere('entry.date BETWEEN :startDate AND :endDate', {
+          startDate: startDate || new Date(0),
+          endDate: endDate || new Date(),
         });
       }
 
