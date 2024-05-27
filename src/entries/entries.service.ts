@@ -53,10 +53,13 @@ export class EntriesService {
         .select(['entry', 'doctor', 'medicalHistory', 'patient']);
       // .getMany();
 
-      // Agrega la condición del tipo de entrada si se proporciona
+      // Add the filter condition based on the entry type
       if (entryType) {
-        queryBuilder.where('entry.type = :type', { type: entryType });
+        queryBuilder.where('LOWER(entry.type) ILIKE :type', {
+          type: `%${entryType.toLowerCase()}%`,
+        });
       }
+
       const entries: Entry[] = await queryBuilder.getMany();
 
       if (entries.length === 0) {
@@ -66,7 +69,12 @@ export class EntriesService {
         });
       }
 
-      return entries;
+      // Transformar los datos para eliminar el objeto 'medicalHistory'
+      return entries.map((entry) => ({
+        ...entry,
+        doctor: entry.doctor || null,
+        patient: entry.medicalHistory ? entry.medicalHistory.patient : null,
+      }));
     } catch (error) {
       throw ErrorManager.createsignatureError(error.message);
     }

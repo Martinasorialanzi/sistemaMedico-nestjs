@@ -1,4 +1,4 @@
-import { Controller, Get, Param, UseGuards } from '@nestjs/common';
+import { Controller, Get, Param, Query, UseGuards } from '@nestjs/common';
 import { EntriesService } from './entries.service';
 import { Roles } from 'src/roles/roles.decorator';
 import { Role } from 'src/roles/role.enum';
@@ -17,8 +17,8 @@ export class EntriesController {
   @Roles(Role.Admin, Role.Secretary)
   @UseGuards(AuthGuard, RolesGuard)
   @Get()
-  findAllEntries() {
-    return this.entriesService.findAllEntries();
+  findAllEntries(@Query('type') entryType?: string) {
+    return this.entriesService.findAllEntries(entryType);
   }
   @Roles(Role.Admin, Role.Secretary)
   @UseGuards(AuthGuard, RolesGuard)
