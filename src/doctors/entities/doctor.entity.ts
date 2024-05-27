@@ -15,7 +15,7 @@ export class Doctor extends BaseEntity {
   surname: string;
 
   @Column('text')
-  specialty: string;
+  speciality: string;
 
   @Column('date')
   AdmissionDate: Date;

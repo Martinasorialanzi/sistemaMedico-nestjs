@@ -5,6 +5,7 @@ import { DeleteResult, Repository, UpdateResult } from 'typeorm';
 import { Doctor } from './entities/doctor.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ErrorManager } from 'src/utils/error.manager';
+import { Entry } from 'src/entries/entities/entry.entity';
 
 @Injectable()
 export class DoctorsService {
@@ -12,6 +13,8 @@ export class DoctorsService {
   constructor(
     @InjectRepository(Doctor)
     private readonly doctorRepository: Repository<Doctor>,
+    @InjectRepository(Entry)
+    private readonly entryRepository: Repository<Entry>,
   ) {}
 
   public async createDoctor(body: CreateDoctorDto): Promise<Doctor> {
@@ -84,6 +87,13 @@ export class DoctorsService {
 
   public async removeDoctor(id: number): Promise<DeleteResult> {
     try {
+      // Set doctorId to null in related entries
+      await this.entryRepository
+        .createQueryBuilder()
+        .update(Entry)
+        .set({ doctor: null })
+        .where('doctorId= :id', { id })
+        .execute();
       const doctor: DeleteResult = await this.doctorRepository.delete(id);
       if (doctor.affected === 0) {
         throw new ErrorManager({

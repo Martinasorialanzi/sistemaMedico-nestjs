@@ -5,11 +5,11 @@ export class CreatePracticeDto {
   @IsDate()
   date: Date;
   @IsNotEmpty()
-  @IsString()
-  patient: string;
+  @IsNumber()
+  patientId: number;
   @IsNotEmpty()
-  @IsString()
-  doctor: string;
+  @IsNumber()
+  doctorId: number;
   @IsNotEmpty()
   @IsNumber()
   duration: number;
@@ -19,6 +19,4 @@ export class CreatePracticeDto {
   @IsNotEmpty()
   @IsString()
   result: string;
-
-  createdAt: Date;
 }

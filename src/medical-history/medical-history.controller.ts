@@ -37,8 +37,8 @@ export class MedicalHistoryController {
   @Roles(Role.Admin, Role.Secretary)
   @UseGuards(AuthGuard, RolesGuard)
   @Get(':id')
-  findOneMedicalHistory(@Param('id') id: string) {
-    return this.medicalHistoryService.findOneMedicalHistory(+id);
+  findOneMedicalHistory(@Param('id') id: number) {
+    return this.medicalHistoryService.findOneMedicalHistory(id);
   }
 
   // @Patch(':id')

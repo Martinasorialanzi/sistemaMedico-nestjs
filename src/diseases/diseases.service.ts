@@ -28,9 +28,18 @@ export class DiseasesService {
     }
   }
 
-  public async findAllDiseases(): Promise<Disease[]> {
+  public async findAllDiseases(filter?: string): Promise<Disease[]> {
     try {
-      const diseases: Disease[] = await this.diseaseRepository.find();
+      let query = this.diseaseRepository.createQueryBuilder('disease');
+
+      if (filter) {
+        query = query.where('disease.disease ILIKE :filter', {
+          filter: `%${filter}%`,
+        });
+      }
+
+      const diseases: Disease[] = await query.getMany();
+
       //aca guardo el error como tal
       if (diseases.length === 0) {
         throw new ErrorManager({

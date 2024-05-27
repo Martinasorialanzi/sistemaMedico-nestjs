@@ -7,6 +7,7 @@ import {
   Param,
   Delete,
   UseGuards,
+  Query,
 } from '@nestjs/common';
 import { DiseasesService } from './diseases.service';
 import { CreateDiseaseDto } from './dto/create-disease.dto';
@@ -21,14 +22,14 @@ export class DiseasesController {
   constructor(private readonly diseasesService: DiseasesService) {}
   @Roles(Role.Admin, Role.Secretary)
   @UseGuards(AuthGuard, RolesGuard)
-  @Post()
+  @Post('register')
   createDisease(@Body() body: CreateDiseaseDto) {
     return this.diseasesService.createDisease(body);
   }
 
   @Get()
-  findAllDiseases() {
-    return this.diseasesService.findAllDiseases();
+  findAllDiseases(@Query('filter') filter?: string) {
+    return this.diseasesService.findAllDiseases(filter);
   }
   @Roles(Role.Admin, Role.Secretary)
   @UseGuards(AuthGuard, RolesGuard)

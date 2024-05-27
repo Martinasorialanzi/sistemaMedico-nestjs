@@ -6,10 +6,12 @@ import {
   NumericType,
   OneToOne,
   DeleteDateColumn,
+  Index,
 } from 'typeorm';
 
 @Entity()
 export class Patient extends BaseEntity {
+  @Index({ unique: true })
   @Column('bigint')
   dni: NumericType;
 
@@ -29,6 +31,9 @@ export class Patient extends BaseEntity {
     cascade: true,
   })
   medicalHistory: MedicalHistory;
+
+  // @Column({ nullable: true })
+  // medicalHistoryId: number;
 
   @DeleteDateColumn()
   deletedAt?: Date; // Esta columna almacenará la fecha de eliminación

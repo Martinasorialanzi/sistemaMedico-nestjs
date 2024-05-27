@@ -1,4 +1,10 @@
-import { IsBoolean, IsDate, IsNotEmpty, IsString } from 'class-validator';
+import {
+  IsBoolean,
+  IsDate,
+  IsNotEmpty,
+  IsNumber,
+  IsString,
+} from 'class-validator';
 import { Disease } from 'src/diseases/entities/disease.entity';
 
 export class CreateConsultationDto {
@@ -8,11 +14,11 @@ export class CreateConsultationDto {
   @IsDate()
   date: Date;
   @IsNotEmpty()
-  @IsString()
-  patient: string;
+  @IsNumber()
+  doctorId: number;
   @IsNotEmpty()
-  @IsString()
-  doctor: string;
+  @IsNumber()
+  patientId: number;
   @IsNotEmpty()
   @IsString()
   reason: string;

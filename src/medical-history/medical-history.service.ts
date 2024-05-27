@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { Repository } from 'typeorm';
-import { InjectRepository } from '@nestjs/typeorm';
+import { Repository, EntityManager } from 'typeorm';
+import { InjectEntityManager, InjectRepository } from '@nestjs/typeorm';
 import { ErrorManager } from 'src/utils/error.manager';
 import { MedicalHistory } from './entities/medical-history.entity';
 import { CreateMedicalHistoryDto } from './dto/create-medical-history.dto';
@@ -11,6 +11,8 @@ import { CreateMedicalHistoryDto } from './dto/create-medical-history.dto';
 export class MedicalHistoryService {
   //inyecto mi repositorio:
   constructor(
+    @InjectEntityManager()
+    private readonly entityManager: EntityManager,
     @InjectRepository(MedicalHistory)
     private readonly medicalHistoryRepository: Repository<MedicalHistory>,
   ) {}
@@ -34,12 +36,10 @@ export class MedicalHistoryService {
 
   public async findAllMedicalHistory(): Promise<MedicalHistory[]> {
     try {
-      const medicalHistories: MedicalHistory[] =
-        await this.medicalHistoryRepository.find({
-          relations: {
-            patient: true,
-          },
-        });
+      const medicalHistories: MedicalHistory[] = await this.entityManager
+        .createQueryBuilder(MedicalHistory, 'medicalHistory')
+        .leftJoinAndSelect('medicalHistory.entries', 'entry')
+        .getMany();
       //aca guardo el error como tal
       if (medicalHistories.length === 0) {
         throw new ErrorManager({
@@ -56,9 +56,11 @@ export class MedicalHistoryService {
 
   public async findOneMedicalHistory(id: number): Promise<MedicalHistory> {
     try {
-      const medicalHistory: MedicalHistory = await this.medicalHistoryRepository
-        .createQueryBuilder('user')
-        .where({ id })
+      const medicalHistory = await this.entityManager
+        .createQueryBuilder(MedicalHistory, 'medicalHistory')
+        .leftJoinAndSelect('medicalHistory.entries', 'entry')
+        // .leftJoinAndSelect('entry.doctor', 'doctor')
+        .where('medicalHistory.id = :id', { id })
         .getOne();
       if (!medicalHistory) {
         throw new ErrorManager({

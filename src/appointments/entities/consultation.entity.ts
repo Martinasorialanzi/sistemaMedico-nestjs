@@ -1,19 +1,12 @@
-import { BaseEntity } from 'src/config/base.entity';
+// import { BaseEntity } from 'src/config/base.entity';
 import { Disease } from 'src/diseases/entities/disease.entity';
 import { Entry } from 'src/entries/entities/entry.entity';
-// import { Entry } from 'src/entries/entities/entry.entity';
-import { Entity, Column, JoinColumn, ManyToOne, OneToOne } from 'typeorm';
+import { Column, JoinColumn, ManyToOne, ChildEntity } from 'typeorm';
 
-@Entity()
-export class Consultation extends BaseEntity {
+@ChildEntity()
+export class Consultation extends Entry {
   @Column({ type: 'date' })
   date: Date;
-
-  @Column()
-  patient: string;
-
-  @Column()
-  doctor: string;
 
   @Column('text')
   reason: string;
@@ -25,6 +18,9 @@ export class Consultation extends BaseEntity {
   @Column()
   diagnosisConfirmed: boolean;
 
-  @OneToOne(() => Entry, (entry) => entry.consultations)
-  entry: Entry;
+  @Column({ nullable: true }) // Nullable porque el valor será establecido manualmente
+  patientId: number; // Este campo almacenará el ID del paciente
+
+  @Column({ nullable: true })
+  doctorId: number;
 }

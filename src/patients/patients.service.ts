@@ -41,8 +41,25 @@ export class PatientsService {
 
   public async findAllPatients(): Promise<Patient[]> {
     try {
-      const patients: Patient[] = await this.patientRepository.find();
-      //aca guardo el error como tal
+      const patients: Patient[] = await this.patientRepository
+        //   relations: ['medicalHistory'],
+        // });
+        //aca guardo el error como tal
+        .createQueryBuilder('patient')
+        .leftJoinAndSelect('patient.medicalHistory', 'medicalHistory')
+        .select([
+          'patient.id',
+          'patient.dni',
+          'patient.name',
+          'patient.surname',
+          'patient.birthDate',
+          'patient.healthInsurance',
+          'patient.createdAt',
+          'patient.updatedAt',
+          'patient.deletedAt',
+          'medicalHistory.id',
+        ])
+        .getMany();
       if (patients.length === 0) {
         throw new ErrorManager({
           type: 'BAD_REQUEST',
@@ -76,8 +93,21 @@ export class PatientsService {
   public async findOnePatient(id: number): Promise<Patient> {
     try {
       const patient: Patient = await this.patientRepository
-        .createQueryBuilder('user')
+        .createQueryBuilder('patient')
         .where({ id })
+        .leftJoinAndSelect('patient.medicalHistory', 'medicalHistory')
+        .select([
+          'patient.id',
+          'patient.dni',
+          'patient.name',
+          'patient.surname',
+          'patient.birthDate',
+          'patient.healthInsurance',
+          'patient.createdAt',
+          'patient.updatedAt',
+          'patient.deletedAt',
+          'medicalHistory.id',
+        ])
         .getOne();
       if (!patient) {
         throw new ErrorManager({

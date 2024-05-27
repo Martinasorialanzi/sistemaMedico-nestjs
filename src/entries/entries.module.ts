@@ -13,5 +13,6 @@ import { MedicalHistory } from 'src/medical-history/entities/medical-history.ent
   ],
   controllers: [EntriesController],
   providers: [EntriesService],
+  // exports: [Entry],
 })
 export class EntriesModule {}

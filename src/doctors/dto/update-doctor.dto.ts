@@ -11,7 +11,7 @@ export class UpdateDoctorDto extends PartialType(CreateDoctorDto) {
   surname: string;
   @IsOptional()
   @IsString()
-  specialty: string;
+  speciality: string;
   @IsOptional()
   @IsDate()
   AdmissionDate: Date;

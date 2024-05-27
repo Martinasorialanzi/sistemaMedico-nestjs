@@ -1,28 +1,18 @@
-// import { Consultation } from 'src/appointments/entities/consultation.entity';
-import { Consultation } from 'src/appointments/entities/consultation.entity';
 import { BaseEntity } from 'src/config/base.entity';
 import { Doctor } from 'src/doctors/entities/doctor.entity';
 import { MedicalHistory } from 'src/medical-history/entities/medical-history.entity';
-// import { Doctor } from 'src/doctors/entities/doctor.entity';
-// import { MedicalHistory } from 'src/medical-history/entities/medical-history.entity';
-import { Practice } from 'src/practices/entities/practice.entity';
-// import { Practice } from 'src/practices/entities/practice.entity';
-import { Entity, JoinColumn, ManyToOne, OneToOne } from 'typeorm';
+import { Entity, JoinColumn, ManyToOne, TableInheritance } from 'typeorm';
 
 @Entity()
+@TableInheritance({ column: { type: 'varchar', name: 'type' } })
 export class Entry extends BaseEntity {
-  @ManyToOne(() => Doctor, (doctor) => doctor.entries)
-  @JoinColumn()
+  @ManyToOne(() => Doctor, (doctor) => doctor.entries, { eager: true }) // eager loading para cargar Doctor automáticamente
+  @JoinColumn({ name: 'doctorId', referencedColumnName: 'id' }) // Establecer la relación usando doctorId
   doctor: Doctor;
 
-  @ManyToOne(() => MedicalHistory, (medicalHistory) => medicalHistory.entries)
+  @ManyToOne(() => MedicalHistory, (medicalHistory) => medicalHistory.entries, {
+    eager: true,
+  }) // eager loading para cargar medicalHistory automáticamente
+  @JoinColumn({ name: 'patientId', referencedColumnName: 'patientId' }) // Establecer la relación usando patientId
   medicalHistory: MedicalHistory;
-
-  @OneToOne(() => Consultation, (consultation) => consultation.entry)
-  @JoinColumn()
-  consultations: Consultation;
-
-  @OneToOne(() => Practice, (practice) => practice.entry)
-  @JoinColumn()
-  practices: Practice;
 }

@@ -13,7 +13,7 @@ export class CreateDoctorDto {
   surname: string;
   @IsNotEmpty()
   @IsString()
-  specialty: string;
+  speciality: string;
   @IsNotEmpty()
   @IsDate()
   AdmissionDate: Date;

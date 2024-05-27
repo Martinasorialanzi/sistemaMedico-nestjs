@@ -7,11 +7,11 @@ export class UpdatePracticeDto extends PartialType(CreatePracticeDto) {
   @IsDate()
   date: Date;
   @IsOptional()
-  @IsString()
-  patient: string;
+  @IsNumber()
+  patientId: number;
   @IsOptional()
-  @IsString()
-  doctor: string;
+  @IsNumber()
+  doctorId: number;
   @IsOptional()
   @IsNumber()
   duration: number;
